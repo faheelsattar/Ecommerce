@@ -15,5 +15,9 @@ router.get("/products" , shopcontrollers.getProducts)
 
 router.get("/cart", shopcontrollers.getCart)
 
+router.get("/orders", shopcontrollers.getOrders)
+
 router.get("/checkout", shopcontrollers.getCheckout)
+
+router.get("/product/:productid",shopcontrollers.getProduct)
 module.exports = router

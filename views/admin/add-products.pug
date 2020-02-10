@@ -5,7 +5,17 @@ block styles
 
 block content
     main
-        form.form-control(action="/admin/add-products")(method="POST")
-            label Name:
-            input(name="title")(type="text")
+        form.product-form(action="/admin/add-products")(method="POST")
+            div.form-control
+                label Name:
+                input(name="title")(type="text")   
+            div.form-control
+                label Image URL:
+                input(name="imageURL")(type="text")
+            div.form-control
+                label Price:
+                input(name="price")(type="number")
+            div.form-control
+                label Description:
+                textarea(name="description")(type="text")(row="5")
             button(type="submit") Add products
