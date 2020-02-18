@@ -1,4 +1,4 @@
-const Product = require("../models/product")
+const Product = require("../modelsdb/product")
 
 exports.getAddProducts=(req,res)=>{
     //res.sendFile(path.join(__dirname, "../", "views", "add-product.html"))
@@ -15,18 +15,23 @@ exports.saveProducts=(req,res)=>{
     const description = req.body.description
     const product = new Product(title, imageURL, price, description)
     product.save()
-    res.redirect("/")
+    .then(()=>{
+        return res.redirect("/")
+    })
+    .catch((err)=>{console.log(err)})
 }
 
 exports.getProducts=(req,res)=>{
-    Product.fetchAll( (products)=>{
-    res.render("admin/products",  
-    {
-        products: products, 
-        path:"/admin/products", 
-        pagetitle:"Products"
+    Product.fetchAll()
+    .then(([rows,fields])=>{
+        res.render("admin/products",  
+        {
+            products: rows, 
+            path:"/admin/products", 
+            pagetitle:"Products"
+        })
     })
-})
+    .catch((err)=>{console.log(err)})
 }
 
 exports.getEditProducts=(req,res)=>{

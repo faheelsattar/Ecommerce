@@ -1,6 +1,6 @@
 const path = require("path")
 const router = require("express").Router()
-const shopcontrollers = require("../controllers/shop")
+const shopcontrollers = require("../controllersdb/shop")
 /*
 router.get("/",(req,res)=>{
     console.log(products)

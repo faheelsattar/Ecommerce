@@ -1,6 +1,6 @@
 const router = require("express").Router()
 const path = require("path")
-const admincontrollers= require("../controllers/admin")
+const admincontrollers= require("../controllersdb/admin")
 
 router.get("/add-products" , admincontrollers.getAddProducts) //using ths controller in controllers folder
 

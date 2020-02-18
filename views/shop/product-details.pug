@@ -4,3 +4,5 @@ block content
         h1 #{product[0].title}
         p #{product[0].price}
         p #{product[0].description}
+        form(action=`/cart/?productid=${product[0].id}` method="POST")
+                button(type="submit" class="btn") Add to Cart 

@@ -1,4 +1,21 @@
-extends ../layouts/main-layout
+extends ../layouts/main-layout.pug
 
-block content 
-    h1 Edit products
+block styles
+    link(rel="stylesheet", href="/css/forms.css")
+
+block content
+    main
+        form.product-form(action=`/admin/edit-product/?id=${product[0].id}` method="POST")
+            div.form-control
+                label Name:
+                input(name="title" type="text" value= `${product[0].title}` )   
+            div.form-control
+                label Image URL:
+                input(name="imageURL" type="text" value = `${product[0].imageUrl}`)
+            div.form-control
+                label Price:
+                input(name="price")(type="number" value= `${product[0].price}`)
+            div.form-control
+                label Description:
+                textarea(name="description" type="text" row="5") #{product[0].description}
+            button(type="submit") Edit products

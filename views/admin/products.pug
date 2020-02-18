@@ -11,15 +11,13 @@ block content
                         header.card__header
                             h1.product__title #{product.title}
                         div.card__image
-                            img(src=product.imageURL)(alt="A Book")
+                            img(src=`${product.imageURL}`)(alt="A Book")
                         div.card__content
                             h2.product__price #{product.price}
                             p.product__description #{product.description}
                         div.card__actions
-                            a(href="/admin/edit-product").btn Edit
-                            form(action="/admin/delete-product")(method ="POST")
+                            a(href=`/admin/edit-product?id=${product.id}`).btn Edit
+                            form(action=`/admin/delete-product?id=${product.id}`)(method ="POST")
                                 button.btn(type="submit") Delete
-
-
         else
             h1 No products

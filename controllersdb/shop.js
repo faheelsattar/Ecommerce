@@ -1,15 +1,17 @@
-const Product = require("../models/product")
-const Cart = require("../models/cart")
+const Product = require("../modelsdb/product")
+const Cart = require("../modelsdb/cart")
 
 exports.getIndex=(req,res)=>{
-    Product.fetchAll((products)=>{
-        res.render("shop/product-list", 
+    Product.fetchAll()
+    .then(([rows,fields])=>{
+        res.render("admin/products",  
         {
-            products: products, 
+            products: rows, 
             path:"/products", 
             pagetitle:"Products"
-        }) 
-    })// render the default templating engine that has been specified in app.js
+        })// render the default templating engine that has been specified in app.js
+    })
+    .catch((err)=>{console.log(err)})
 }
 
 exports.getProduct=(req,res)=>{
@@ -26,14 +28,16 @@ exports.getProduct=(req,res)=>{
 }
 
 exports.getProducts=(req,res)=>{
-    Product.fetchAll( (products)=>{
-        res.render("shop/product-list", 
+    Product.fetchAll()
+    .then(([rows,fields])=>{
+        res.render("admin/products",  
         {
-            products: products, 
+            products: rows, 
             path:"/products", 
             pagetitle:"Products"
-        }) 
+        })
     })
+    .catch((err)=>{console.log(err)})
  
 }
 

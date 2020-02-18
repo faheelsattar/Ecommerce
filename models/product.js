@@ -1,5 +1,6 @@
 const path = require("path")
 const fs= require("fs")
+const Cart = require("./cart")
 
 const p =path.join(
     path.dirname(process.mainModule.filename),
@@ -42,7 +43,6 @@ class Product {
         })
     }
 
-
     static fetchAll(cb){
         getAllProducts(cb) //higher order function
     }
@@ -54,6 +54,36 @@ class Product {
             cb(product)
         })
     }
+
+    static editProduct(id, title, imageURL, price, description){
+        this.fetchAll((products) =>{
+            const productindex= products.findIndex(prod => prod.id === id )
+            console.log(productindex, "index")
+            products[productindex].id=id
+            products[productindex].title= title
+            products[productindex].imageURL= imageURL
+            products[productindex].price= price
+            products[productindex].description= description
+            fs.writeFile(p,JSON.stringify(products) , (err)=>{
+                console.log(err)
+            } ) 
+        })
+    }
+
+    static deleteProduct(id){
+        this.fetchAll((products)=>{
+            const productindex = products.findIndex(prod=> prod.id === id)
+            const price = products[productindex].price
+            products.splice(productindex,1)
+            fs.writeFile(p , JSON.stringify(products),(err)=>{
+                if(!err){
+                    Cart.deleteProduct(id, price)
+                }
+            })
+        })
+    }
 }
+
+
 
 module.exports = Product
