@@ -6,7 +6,6 @@ const app = express()
 const {adminroutes}= require("./routesdb/admin")
 const shoproutes= require("./routesdb/shop")
 const errorController = require("./controllersdb/error")
-const db=require("./utils/database")
 
 app.set("view engine", "pug") //specifying the templating engine
 app.set("views", "views") // specifying the folder for the templating files
@@ -25,10 +24,13 @@ app.use("/admin",adminroutes)
 app.use(shoproutes) 
 app.use(errorController.notFoundError)
 
+
 const server = http.createServer(app)
 
 server.listen("4000",()=>{
     console.log("Server is up and running")
 })
+
+
 
 

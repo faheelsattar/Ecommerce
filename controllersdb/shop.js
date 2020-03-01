@@ -4,7 +4,7 @@ const Cart = require("../modelsdb/cart")
 exports.getIndex=(req,res)=>{
     Product.fetchAll()
     .then(([rows,fields])=>{
-        res.render("admin/products",  
+        res.render("shop/index",  
         {
             products: rows, 
             path:"/products", 
@@ -16,21 +16,23 @@ exports.getIndex=(req,res)=>{
 
 exports.getProduct=(req,res)=>{
     const productid= req.params.productid
-    Product.findById(productid, (product)=>{
-        console.log(product)
+    Product.findById(productid)
+    .then(([rows,fields])=>{
         res.render("shop/product-details",
         {
-            product:product,
+            product:rows[0],
             pagetitle:"Product Details",
         }
     )
     })
+    .catch(err=>console.log(err))   
 }
 
 exports.getProducts=(req,res)=>{
     Product.fetchAll()
     .then(([rows,fields])=>{
-        res.render("admin/products",  
+        console.log(rows[0].id)
+        res.render("shop/product-list",  
         {
             products: rows, 
             path:"/products", 
@@ -50,33 +52,30 @@ exports.getOrders=(req,res)=>{
 }
 
 exports.getCart=(req,res)=>{
-    Cart.getCart((cart)=>{
-        Product.fetchAll((products)=>{
-            const cartproducts=[]
-            for(product of products){
-                const cartproductsdata=cart.product.find(prod=> prod.id === product.id)
-                console.log(cartproductsdata,1)
-                if(cartproductsdata){
-                    cartproducts.push({productdata:product, quantity:cartproductsdata.quantity })
-                }
-            }
-            console.log(cartproducts)
-            res.render("shop/cart", 
-            {
-                path:"/cart", 
-                pagetitle:"Cart",
-                products:cartproducts
-            })
-        })
-    })
+    
 }
 
 exports.postCart=(req,res)=>{
-    const {productid} = req.query
-    Product.findById(productid, (product)=>{
-        console.log(product[0].price)
-    Cart.addToCart(productid, product[0].price)
+    const {productid}= req.query
+    Cart.getProducts(productid)
+    .then(([rows,fields])=>{
+        if(rows.length >0){
+        Cart.addProducts(productid,true,rows[0].quantity+1)
+        .then((result) => {
+            console.log(result)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }else{
+        Cart.addProducts(productid,false,1)
+        .then((result) => {
+            console.log(result)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
     })
+    .catch(err=>console.log(err))
     res.redirect("/cart")
 }
 
@@ -96,6 +95,3 @@ exports.getCheckout=(req,res)=>{
         pagetitle:"Checkout"
     })
 }
-
-
-

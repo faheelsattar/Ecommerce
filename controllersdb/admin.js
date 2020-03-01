@@ -37,13 +37,15 @@ exports.getProducts=(req,res)=>{
 exports.getEditProducts=(req,res)=>{
     const {id} = req.query
     console.log(id)
-    Product.findById(id, (product)=>{
+    Product.findById(id)
+    .then(([rows,fields])=>{
         res.render("admin/edit-product",
         {
-            product:product,     
+            product:rows,     
         }
         )
     })
+    .catch(err=>console.log(err))
 }
 
 exports.postEditProducts=(req,res)=>{
