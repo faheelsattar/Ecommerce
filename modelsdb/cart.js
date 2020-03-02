@@ -17,6 +17,11 @@ class Cart{
         }
     }
 
+    static getCart(){
+        const query = "select products.id, products.title, cartitems.quantity from products inner join cartitems on products.Id = cartitems.productId where cartitems.cartId=?"
+        return db.execute(query,[1])
+    }
+
     
 
 

@@ -20,7 +20,7 @@ exports.getProduct=(req,res)=>{
     .then(([rows,fields])=>{
         res.render("shop/product-details",
         {
-            product:rows[0],
+            products:rows[0],
             pagetitle:"Product Details",
         }
     )
@@ -52,7 +52,16 @@ exports.getOrders=(req,res)=>{
 }
 
 exports.getCart=(req,res)=>{
-    
+    Cart.getCart()
+    .then(([rows,fields]) => {
+        console.log(rows)
+        res.render("shop/cart",{
+            products:rows,
+            pagetitle:"Cart"
+        })
+    }).catch((err) => {
+        console.log(err)
+    });
 }
 
 exports.postCart=(req,res)=>{
