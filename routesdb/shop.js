@@ -1,6 +1,8 @@
 const path = require("path")
 const router = require("express").Router()
 const shopcontrollers = require("../controllersdb/shop")
+const {sessionChecker} = require("../middlewares/session")
+
 /*
 router.get("/",(req,res)=>{
     console.log(products)
@@ -13,15 +15,15 @@ router.get("/", shopcontrollers.getIndex) // using the show prdocuts controllers
 //shows all the products
 router.get("/products" , shopcontrollers.getProducts)
 
-router.get("/cart", shopcontrollers.getCart)
+router.get("/cart", sessionChecker,  shopcontrollers.getCart)
 
-router.post("/cart", shopcontrollers.postCart)
+router.post("/cart", sessionChecker, shopcontrollers.postCart)
 
-router.post("/cart-delete-item", shopcontrollers.postCartDeleteProduct)
+router.post("/cart-delete-item", sessionChecker, shopcontrollers.postCartDeleteProduct)
 
-router.get("/orders", shopcontrollers.getOrders)
+router.get("/orders", sessionChecker, shopcontrollers.getOrders)
 
-router.get("/checkout", shopcontrollers.getCheckout)
+router.get("/checkout", sessionChecker ,shopcontrollers.getCheckout)
 
 router.get("/product/:productid",shopcontrollers.getProduct)
 module.exports = router

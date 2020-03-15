@@ -18,6 +18,7 @@ block content
                         div.card__actions
                             a(href=`/admin/edit-product?id=${product.id}`).btn Edit
                             form(action=`/admin/delete-product?id=${product.id}`)(method ="POST")
+                                input(type="hidden" name="_csrf" value=csrfToken)
                                 button.btn(type="submit") Delete
         else
             h1 No products

@@ -7,6 +7,7 @@ block content
                 li
                     strong #{product.title} (#{product.quantity})
                     form(action=`/cart-delete-item?id=${product.id}` method="POST")
+                        input(type="hidden" name="_csrf" value=csrfToken)
                         button(class="btn" type="submit") Delete
     else
         h1 No products

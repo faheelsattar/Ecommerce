@@ -1,17 +1,15 @@
 const db= require("../utils/database")
 class Product {
     constructor(title, imageURL, price, description){
-        this.id=Math.random().toString()
         this.title= title   
         this.imageURL=imageURL
         this.price= price
         this.description= description
     }
 
-    save(){
+    save(userid){
        const query = 'insert into products (title, price, description, imageURL, userId) values(?,?,?,?,?)'
-       return db.execute(query,[this.title,this.price, this.description, this.imageURL,2])
-       
+       return db.execute(query,[this.title,this.price, this.description, this.imageURL,userid])
     }
 
     static fetchAll(){
@@ -24,12 +22,14 @@ class Product {
         return db.execute(query,[id])
     }
 
-    static editProduct(id, title, imageURL, price, description){
-        
+    editProduct(id, userid){
+        const query = "update products set title=?, price=?, description=?, imageURL=? where id= ? and userId=?"
+        return db.execute(query,[this.title,this.price, this.description, this.imageURL, id, userid])
     }
 
-    static deleteProduct(id){
-        
+    static deleteProduct(id,userid){
+        const query ="delete from  products where id=? and userId=?"
+        return db.query(query,[id, userid])
     }
 }
 

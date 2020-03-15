@@ -4,5 +4,7 @@ block content
         h1 #{products.title}
         p #{products.price}
         p #{products.description}
-        form(action=`/cart/?productid=${products.id}` method="POST")
-                button(type="submit" class="btn") Add to Cart 
+        if isauthenticated
+                form(action=`/cart/?productid=${products.id}` method="POST")
+                        input(type="hidden" name="_csrf" value=csrfToken)
+                        button(type="submit" class="btn") Add to Cart 

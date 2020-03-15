@@ -8,7 +8,8 @@ exports.getIndex=(req,res)=>{
         {
             products: rows, 
             path:"/products", 
-            pagetitle:"Products"
+            pagetitle:"Products",
+            isauthenticated: req.session.isauthenticated
         })// render the default templating engine that has been specified in app.js
     })
     .catch((err)=>{console.log(err)})
@@ -22,6 +23,7 @@ exports.getProduct=(req,res)=>{
         {
             products:rows[0],
             pagetitle:"Product Details",
+            isauthenticated: req.session.isauthenticated
         }
     )
     })
@@ -31,12 +33,12 @@ exports.getProduct=(req,res)=>{
 exports.getProducts=(req,res)=>{
     Product.fetchAll()
     .then(([rows,fields])=>{
-        console.log(rows[0].id)
         res.render("shop/product-list",  
         {
             products: rows, 
             path:"/products", 
-            pagetitle:"Products"
+            pagetitle:"Products",
+            isauthenticated: req.session.isauthenticated
         })
     })
     .catch((err)=>{console.log(err)})
@@ -47,17 +49,18 @@ exports.getOrders=(req,res)=>{
     res.render("shop/orders", 
     {
         path:"/orders", 
-        pagetitle:"Orders"
+        pagetitle:"Orders",
+        isauthenticated: req.session.isauthenticated
     })
 }
 
 exports.getCart=(req,res)=>{
-    Cart.getCart()
+    Cart.getCart(req.session.user.cartid)
     .then(([rows,fields]) => {
-        console.log(rows)
         res.render("shop/cart",{
             products:rows,
-            pagetitle:"Cart"
+            pagetitle:"Cart",
+            isauthenticated: req.session.isauthenticated
         })
     }).catch((err) => {
         console.log(err)
@@ -69,38 +72,40 @@ exports.postCart=(req,res)=>{
     Cart.getProducts(productid)
     .then(([rows,fields])=>{
         if(rows.length >0){
-        Cart.addProducts(productid,true,rows[0].quantity+1)
+        Cart.addProducts(productid, req.session.user.cartid, true, rows[0].quantity+1)
         .then((result) => {
-            console.log(result)
+            res.redirect("/cart")
         }).catch((err) => {
             console.log(err)
         });
     }else{
-        Cart.addProducts(productid,false,1)
+        Cart.addProducts(productid, req.session.user.cartid, false,1)
         .then((result) => {
-            console.log(result)
+            res.redirect("/cart")
         }).catch((err) => {
             console.log(err)
         });
     }
     })
     .catch(err=>console.log(err))
-    res.redirect("/cart")
 }
 
 exports.postCartDeleteProduct=(req,res)=>{
     const {id} = req.query
-    Product.findById(id, (product)=>{
-        console.log(id,product[0].price)
-        Cart.deleteProduct(id ,product[0].price)
+    Cart.deleteCart(id, req.session.user.cartid)
+    .then((result) => {
         res.redirect("/cart")
-    })
+    }).catch((err) => {
+        console.log(err)
+    });
+
 }
 
 exports.getCheckout=(req,res)=>{
     res.render("shop/checkout", 
     {
         path:"/checkout", 
-        pagetitle:"Checkout"
+        pagetitle:"Checkout",
+        isauthenticated: req.session.isauthenticated
     })
 }
